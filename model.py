@@ -1,6 +1,7 @@
 from User import User
 import numpy as np
-import random
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
 
 def action_wp(p):
     """ Perform action with probability (wp) p
@@ -68,10 +69,29 @@ def run_day(users):
     """ Simulate one day
     :param users (List[User]):
     """
-    k = 1
+    k = .2
     posts_today = model_posting(users)
     model_engagement(users, posts_today)
     update_utp_ute(users, k)
+
+def plot_data(time, cost_avg_utp, cost_avg_ute, no_cost_avg_utp, no_cost_avg_ute):
+    # fig = plt.figure()
+    ax = plt.axes()
+    plt.figure(1)
+    plt.title('Average Urge-to-Post (UTP)')
+    plt.plot(time, cost_avg_utp)
+    plt.plot(time, no_cost_avg_utp)
+    ax.set_ylabel('UTP')
+    ax.set_xlabel('Time')
+
+    plt.figure(2)
+    ax = plt.axes()
+    plt.title('Average Urge-to-Engage (UTE)')
+    plt.plot(time, cost_avg_ute)
+    plt.plot(time, no_cost_avg_ute)
+    ax.set_ylabel('UTE')
+    ax.set_xlabel('Time')
+    plt.show()
 
 def run_exp(cost_model_users, no_cost_model_users, days):
     """
@@ -79,13 +99,21 @@ def run_exp(cost_model_users, no_cost_model_users, days):
     :param no_cost_model_users (List[User]): users in typical no cost model
     :param days (int): number of days to run experiment
     """
+    time = range(1, days+1)
+    cost_avg_utp, cost_avg_ute = [], []
+    no_cost_avg_utp, no_cost_avg_ute = [], []
     while 0 < days:
-        print(f'DAY {days} ===============================')
+        # print(f'DAY {days} ===============================')
         run_day(cost_model_users)
         run_day(no_cost_model_users)
-        print(f'COST UTP: {compute_avg_utp(cost_model_users)}    COST UTE: {compute_avg_ute(cost_model_users)}')
-        print(f'NO_COST UTP: {compute_avg_utp(no_cost_model_users)}     NO_COST UTE: {compute_avg_ute(no_cost_model_users)}')
+        cost_avg_utp.append(compute_avg_utp(cost_model_users))
+        cost_avg_ute.append(compute_avg_ute(cost_model_users))
+        no_cost_avg_utp.append(compute_avg_utp(no_cost_model_users))
+        no_cost_avg_ute.append(compute_avg_ute(no_cost_model_users))
+        # print(f'COST UTP: {compute_avg_utp(cost_model_users)}    COST UTE: {compute_avg_ute(cost_model_users)}')
+        # print(f'NO_COST UTP: {compute_avg_utp(no_cost_model_users)}     NO_COST UTE: {compute_avg_ute(no_cost_model_users)}')
         days -= 1
+    plot_data(time, cost_avg_utp, cost_avg_ute, no_cost_avg_utp, no_cost_avg_ute)
 
 def generate_users(n):
     cost_model_users = []
