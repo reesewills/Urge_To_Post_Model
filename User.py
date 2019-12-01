@@ -7,7 +7,6 @@ class User:
         self.post_cost = post_cost
         self.urge_to_post = urge_to_post
         self.urge_to_engage = urge_to_engage
-        self.ute_original = urge_to_engage
 
     def add_post(self):
         added_post = False
@@ -18,4 +17,7 @@ class User:
         return added_post
 
     def add_point(self):
-        self.points += 1
+        # if there's no cost to posting then there's no need to
+        # add points to user
+        if self.post_cost:
+            self.points += 1
