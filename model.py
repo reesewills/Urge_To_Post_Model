@@ -124,6 +124,7 @@ def generate_users(n):
         no_cost_model_users.append(User(utp, ute, 0))
     return (cost_model_users, no_cost_model_users)
 
-n, days = 50, 50
-cost_model_users, no_cost_model_users = generate_users(n)
-run_exp(cost_model_users, no_cost_model_users, days)
+if __name__ == '__main__':
+    n, days = 365, 365
+    cost_model_users, no_cost_model_users = generate_users(n)
+    run_exp(cost_model_users, no_cost_model_users, days)

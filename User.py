@@ -1,7 +1,7 @@
 from Post import Post
 
 class User:
-    def __init__(self, urge_to_post, urge_to_engage, post_cost=10):
+    def __init__(self, urge_to_post, urge_to_engage, post_cost=50):
         self.posts = []
         self.points = post_cost
         self.post_cost = post_cost
